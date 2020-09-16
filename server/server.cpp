@@ -21,6 +21,11 @@ void initWinSock()
 
 	printf("Initialised\n");
 }
+struct Certificate
+{
+	char name[38];
+	unsigned int hash;
+};
 
 int main() 
 { 
@@ -30,6 +35,9 @@ int main()
 	int addrlen = sizeof(address); 
 	char buffer[1024] = {0}; 
 	const char *hello = "Hello from server"; 
+	Certificate c = { "ok google",767676 };
+
+
 	
 	initWinSock();
 
@@ -63,7 +71,10 @@ int main()
 	{ 
 		perror("accept"); 
 		exit(EXIT_FAILURE); 
-	} 
+	}
+	
+	printf("Certificate Name and hash send\n");
+	send(new_socket, (char*)&c, sizeof(c), 0);
 	printf("Waiting for data...\n");
 	recv( new_socket , buffer, 1024, 0); 
 	printf("Received: %s\n",buffer ); 
