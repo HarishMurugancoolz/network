@@ -20,14 +20,19 @@ void initWinSock()
 
 	printf("Initialised\n");
 }
+struct certBuffer
+{
+	const char name[38];
+	unsigned int hash;
+};
 
 int main() 
 { 
 	int sock = 0; 
 	struct sockaddr_in serv_addr; 
-	const char *hello = "Hello from client"; 
+	const char* hello = "Hello from client"; 
 	char buffer[1024] = {0}; 
-
+	
 	initWinSock();
 
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
@@ -51,6 +56,10 @@ int main()
 		printf("\nConnection Failed \n"); 
 		return -1; 
 	} 
+	certBuffer cb = {};
+	recv(sock,(char*)&cb, 1024, 0);
+	printf("Certificate Name : %s\n", cb.name);
+	printf("Certificate hash : %d\n", cb.hash);
 	send(sock , hello , strlen(hello) , 0 ); 
 	printf("Hello message sent\n"); 
 	recv( sock , buffer, 1024, 0); 
